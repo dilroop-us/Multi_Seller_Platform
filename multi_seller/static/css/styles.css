@@ -1,0 +1,66 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.navbar-light .navbar-brand {
+    font-weight: bold;
+}
+
+.social-icons i {
+    font-size: 24px;
+}
+
+.social-icons a {
+    color: #fff;
+}
+
+.social-icons a:hover {
+    color: #ddd;
+}
+
+footer {
+    background-color: #222;
+}
+
+footer a:hover {
+    text-decoration: none;
+}
+
+.product-card {
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.bg-primary {
+    background-color: #007bff !important;
+}
+
+.text-white {
+    color: #fff !important;
+}
+
+.text-dark {
+    color: #000 !important;
+}
+
+.section-p1 {
+    padding: 1rem 0;
+}
+
+.section-m1 {
+    margin: 1rem 0;
+}
