@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'core',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +73,11 @@ TEMPLATES = [
     },
 ]
 
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
 WSGI_APPLICATION = 'multi_seller.wsgi.application'
 
 
@@ -87,6 +95,8 @@ DATABASES = {
     }
 }
 
+
+AUTH_USER_MODEL = "users.User"
 
 
 # Password validation
@@ -133,6 +143,9 @@ STATICFILES_DIRS = [
 ]
 
 
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+
 
 
 # Default primary key field type
@@ -143,17 +156,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-import sentry_sdk
-
-sentry_sdk.init(
-    dsn="https://951bca5bb449c8698e78818f0c79a1bc@o4508408980307968.ingest.de.sentry.io/4508482110750800",
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for tracing.
-    traces_sample_rate=1.0,
-    _experiments={
-        # Set continuous_profiling_auto_start to True
-        # to automatically start the profiler on when
-        # possible.
-        "continuous_profiling_auto_start": True,
-    },
-)

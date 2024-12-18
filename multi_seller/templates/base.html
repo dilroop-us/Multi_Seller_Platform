@@ -47,7 +47,14 @@
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <li><a class="nav-link" href="">Become a Seller</a></li>
+                            <li><a class="nav-link" href="{% url 'logout' %}">Log out</a></li>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cart' %}">
                             <i class="far fa-shopping-bag"></i> Cart
@@ -55,8 +62,18 @@
                     </li>
                 </ul>
             </div>
+           
         </div>
-    </nav>
+    </nav> 
+        <div>
+            {% if messages %}
+                <ul>
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
 
 
     <main class="container mt-4">

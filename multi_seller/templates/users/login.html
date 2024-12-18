@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}  {# Load the crispy form tag #}
+
+{% block title %}
+Shop
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Login</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}  {# Render form using crispy tag #}
+        
+        <button type="submit" class="btn btn-primary mt-3">Login</button>
+    </form>
+</div>
+{% endblock %}
