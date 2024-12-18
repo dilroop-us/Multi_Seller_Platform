@@ -1,61 +1,16 @@
-{% load static %}
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="X-UA-Compatible" content="IE=edge" />
-    <title>Tech2etc Ecommerce Tutorial</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% block title %}
 
-    <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.9.2/dist/htmx.min.js"></script>
+Home
+    
+{% endblock  %}
+    
 
-    <!-- Alpine.js -->
-    <script src="//unpkg.com/alpinejs" defer></script>
-</head>
 
-<body>
-
-    <!-- HEADER -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="{% static 'img/logo.png' %}" alt="Logo" height="40">
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'shop' %}">Shop</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                            Categories
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Category 1</a>
-                            <a class="dropdown-item" href="#">Category 2</a>
-                            <a class="dropdown-item" href="#">Category 3</a>
-                        </div>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cart' %}">
-                            <i class="far fa-shopping-bag"></i> Cart
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+{% block content %}
+    
 
     <!-- HERO SECTION -->
     <section id=" hero" class="text-center py-5 bg-primary text-white">
@@ -78,67 +33,6 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="section-p1 bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <img class="logo" src="{% static 'img/logo.png' %}" alt="">
-                    <h4>Contact</h4>
-                    <p><strong>Address:</strong> 562 Wellington Road, Street 32, San Francisco</p>
-                    <p><strong>Phone:</strong> +01 2222 365 /(+91) 01 2345 6789</p>
-                    <p><strong>Hours:</strong> 10:00, Mon - Sat</p>
-                    <div class="follow">
-                        <h4>Follow Us</h4>
-                        <div class="icon">
-                            <i class="fab fa-facebook-f"></i>
-                            <i class="fab fa-twitter"></i>
-                            <i class="fab fa-instagram"></i>
-                            <i class="fab fa-pinterest-p"></i>
-                            <i class="fab fa-youtube"></i>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col">
-                    <h4>About</h4>
-                    <a href="#">About Us</a>
-                    <a href="#">Delivery Information</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms & Condition</a>
-                    <a href="#">Contact Us</a>
-                </div>
 
-                <div class="col">
-                    <h4>My Account</h4>
-                    <a href="#">Sign In</a>
-                    <a href="#">View Cart</a>
-                    <a href="#">My Wishlist</a>
-                    <a href="#">Track Your Order</a>
-                    <a href="#">Help</a>
-                </div>
-
-                <div class="col install">
-                    <h4>Install App</h4>
-                    <p>From App Store or Google Play</p>
-                    <div class="row">
-                        <img src="img/pay/app.jpg" alt="" class="img-fluid">
-                        <img src="img/pay/play.jpg" alt="" class="img-fluid">
-                    </div>
-                    <p>Secure Payment Gateways</p>
-                    <img src="img/pay/pay.png" alt="" class="img-fluid">
-                </div>
-            </div>
-        </div>
-
-        <div class="copyright text-center">
-            <p> @ 2023, Madewillcreates - HTML CSS Ecommerce Template</p>
-        </div>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock  %}
