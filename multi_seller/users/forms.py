@@ -11,3 +11,19 @@ class UserRegistrationForm(UserCreationForm):
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Email or Username")
+
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_image', 'street_address', 'city', 'state', 'postal_code', 'country', 'date_of_birth']
+
+    def clean_country(self):
+        country = self.cleaned_data.get('country')
+        if country not in ['US', 'Canada']:
+            raise forms.ValidationError('Only United States and Canada are supported.')
+        return country
+
+
+

@@ -2,16 +2,17 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="X-UA-Compatible" content="IE=edge" />
-    <title>{% block title %}   {% endblock %}   </title>
+    <title>{% block title %} {% endblock %}</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.2/dist/htmx.min.js"></script>
@@ -21,7 +22,6 @@
 </head>
 
 <body>
-
     <!-- HEADER -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
@@ -36,7 +36,8 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'shop' %}">Shop</a></li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown">
                             Categories
                         </a>
                         <div class="dropdown-menu">
@@ -45,16 +46,30 @@
                             <a class="dropdown-item" href="#">Category 3</a>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+
+    
                     {% if request.user.is_authenticated %}
-                        <li class="nav-item">
-                            <li><a class="nav-link" href="">Become a Seller</a></li>
-                            <li><a class="nav-link" href="{% url 'logout' %}">Log out</a></li>
+                        <!-- Dropdown for authenticated users -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown">
+                                My Account
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a>
+                                <a class="dropdown-item" href="">View Cart</a>
+                                <a class="dropdown-item" href="">My Wishlist</a>
+                                <a class="dropdown-item" href="">Track Your Order</a>
+                                <a class="dropdown-item" href="">Help</a>
+                                <a class="dropdown-item" href="">Become a Seller</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                            </div>
                         </li>
+                    {% else %}
+                        <!-- Separate links for unauthenticated users -->
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Sign In</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
                     {% endif %}
+    
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cart' %}">
                             <i class="far fa-shopping-bag"></i> Cart
@@ -62,38 +77,37 @@
                     </li>
                 </ul>
             </div>
-           
         </div>
-    </nav> 
-        <div>
-            {% if messages %}
-                <ul>
-                {% for message in messages %}
-                    <li class="{{ message.tags }}">{{ message }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-
-
-    <main class="container mt-4">
-        
-        {% block content %}
-            
-
-        {% endblock  %}
-
-    </main>
+    </nav>
     
+
+    <div>
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
+    <main class="container mt-4">{% block content %} {% endblock %}</main>
+
     <!-- FOOTER -->
     <footer class="section-p1 bg-light">
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <img class="logo" src="{% static 'img/logo.png' %}" alt="">
+                    <img class="logo" src="{% static 'img/logo.png' %}" alt />
                     <h4>Contact</h4>
-                    <p><strong>Address:</strong> 562 Wellington Road, Street 32, San Francisco</p>
-                    <p><strong>Phone:</strong> +01 2222 365 /(+91) 01 2345 6789</p>
+                    <p>
+                        <strong>Address:</strong> 562 Wellington Road,
+                        Street 32, San Francisco
+                    </p>
+                    <p>
+                        <strong>Phone:</strong> +01 2222 365 /(+91) 01 2345
+                        6789
+                    </p>
                     <p><strong>Hours:</strong> 10:00, Mon - Sat</p>
                     <div class="follow">
                         <h4>Follow Us</h4>
@@ -116,38 +130,28 @@
                     <a href="#">Contact Us</a>
                 </div>
 
-                <div class="col">
-                    <h4>My Account</h4>
-                    <a href="#">Sign In</a>
-                    <a href="#">View Cart</a>
-                    <a href="#">My Wishlist</a>
-                    <a href="#">Track Your Order</a>
-                    <a href="#">Help</a>
-                </div>
-
                 <div class="col install">
                     <h4>Install App</h4>
                     <p>From App Store or Google Play</p>
                     <div class="row">
-                        <img src="img/pay/app.jpg" alt="" class="img-fluid">
-                        <img src="img/pay/play.jpg" alt="" class="img-fluid">
+                        <img src="{% static 'img/pay/play.jpg' %}" alt class="img-fluid" />
+                        <img src="{% static 'img/pay/app.jpg' %}" alt class="img-fluid" />
                     </div>
                     <p>Secure Payment Gateways</p>
-                    <img src="img/pay/pay.png" alt="" class="img-fluid">
+                    <img src="{% static 'img/pay/pay.png' %}" alt class="img-fluid" />
                 </div>
             </div>
         </div>
 
         <div class="copyright text-center">
-            <p> @ 2023, Madewillcreates - HTML CSS Ecommerce Template</p>
+            <p>@ 2023, Madewillcreates - HTML CSS Ecommerce Template</p>
         </div>
     </footer>
-    
-    
 
     <!-- Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

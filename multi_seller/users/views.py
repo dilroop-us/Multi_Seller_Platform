@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm, LoginForm
+from .forms import UserRegistrationForm, LoginForm, EditProfileForm
 from .models import User, UserProfile
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
@@ -43,5 +43,23 @@ def user_logout(request):
 
 @login_required
 @never_cache
-def profile(request):
-    return render(request, 'users/profile.html', {'user': request.user})
+def profile_view(request):
+    # Get the user's profile
+    profile = request.user.profile
+    return render(request, 'users/profile.html', {'profile': profile})
+
+
+@login_required
+@never_cache
+def edit_profile(request):
+    profile = request.user.profile
+
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to profile view after saving changes
+    else:
+        form = EditProfileForm(instance=profile)
+
+    return render(request, 'users/edit_profile.html', {'form': form})
