@@ -9,9 +9,9 @@ class UserRegistrationForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'phone_number']
 
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Email or Username")
-
 
 
 class EditProfileForm(forms.ModelForm):

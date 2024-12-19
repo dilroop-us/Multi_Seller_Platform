@@ -12,7 +12,6 @@ def register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Create associated user profile
             UserProfile.objects.create(user=user)
             messages.success(request, 'User account has been created successfully!')
             return redirect('login')
@@ -38,27 +37,29 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
+    messages.success(request, 'You have been logged out successfully!')
     return redirect('login')
 
 
 @login_required
 @never_cache
-def profile_view(request):
-    # Get the user's profile
-    profile = request.user.profile
+def profile_view(request, pk):
+    profile = UserProfile.objects.get(user_id=pk)
+    messages.success(request, 'You have been logged in successfully!')
     return render(request, 'users/profile.html', {'profile': profile})
 
 
 @login_required
 @never_cache
-def edit_profile(request):
-    profile = request.user.profile
+def edit_profile(request, pk):
+    profile = UserProfile.objects.get(user_id=pk)
 
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('profile')  # Redirect to profile view after saving changes
+            messages.success(request, 'Your profile has been updated successfully!')
+            return redirect('profile')  
     else:
         form = EditProfileForm(instance=profile)
 

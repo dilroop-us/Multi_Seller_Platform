@@ -26,14 +26,11 @@
         <p><strong>State/Province:</strong> {{ profile.state }}</p>
         <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
         <p><strong>Country:</strong> {{ profile.get_country_display }}</p>
+        <p><strong>Date of Birth: </strong> {{ profile.date_of_birth }}</p>
     </div>
 
-    <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary mt-3">Edit Profile</a>
+    <a href="{% url 'edit_profile' pk=user.pk %}" class="btn btn-outline-primary mt-3">Edit Profile</a>
 </div>
-
-
-
-
 
 <br>
 

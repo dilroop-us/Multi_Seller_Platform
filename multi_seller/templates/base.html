@@ -47,29 +47,41 @@
                         </div>
                     </li>
 
-    
+
                     {% if request.user.is_authenticated %}
-                        <!-- Dropdown for authenticated users -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown">
-                                My Account
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a>
-                                <a class="dropdown-item" href="">View Cart</a>
-                                <a class="dropdown-item" href="">My Wishlist</a>
-                                <a class="dropdown-item" href="">Track Your Order</a>
-                                <a class="dropdown-item" href="">Help</a>
-                                <a class="dropdown-item" href="">Become a Seller</a>
-                                <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
-                            </div>
-                        </li>
-                    {% else %}
-                        <!-- Separate links for unauthenticated users -->
-                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Sign In</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
+                            data-toggle="dropdown">
+                            My Account
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'profile' pk=user.pk %}">View Profile</a>
+                            <a class="dropdown-item" href="{% url 'edit_profile' pk=user.pk %}">Edit Profile</a>
+                            <a class="dropdown-item" href="">My Wishlist</a>
+                            <a class="dropdown-item" href="">Track Your Order</a>
+                            <a class="dropdown-item" href="">Help</a>
+                            <a class="dropdown-item" href="{% url 'seller_register' %}">Become a Seller</a>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                        </div>
+                    </li>
+                    {% if request.user.seller %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="sellerDropdown" role="button"
+                            data-toggle="dropdown">
+                            Seller Dashboard
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'sales' pk=request.user.seller.pk %}">Sales Analytics</a>
+                            <a class="dropdown-item" href="{% url 'seller_profile' pk=request.user.seller.pk %}">Seller Profile</a>
+                        </div>
+                    </li>
                     {% endif %}
-    
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Sign In</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    {% endif %}
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cart' %}">
                             <i class="far fa-shopping-bag"></i> Cart
@@ -79,15 +91,13 @@
             </div>
         </div>
     </nav>
-    
 
-    <div>
+
+    <div class="container mt-4 mb-4 text-center">
         {% if messages %}
-        <ul>
             {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
+                {{ message }}
             {% endfor %}
-        </ul>
         {% endif %}
     </div>
 
@@ -101,14 +111,12 @@
                     <img class="logo" src="{% static 'img/logo.png' %}" alt />
                     <h4>Contact</h4>
                     <p>
-                        <strong>Address:</strong> 562 Wellington Road,
-                        Street 32, San Francisco
+                        <strong>Address:</strong> 562 Wellington Road,Street 32, San Francisco
                     </p>
                     <p>
-                        <strong>Phone:</strong> +01 2222 365 /(+91) 01 2345
-                        6789
+                        <strong>Phone:</strong> +1 2222 333 444 / +1 2345 678 900
                     </p>
-                    <p><strong>Hours:</strong> 10:00, Mon - Sat</p>
+                    <p><strong>Hours:</strong> 09:00 - 18:00 , Mon - Sat</p>
                     <div class="follow">
                         <h4>Follow Us</h4>
                         <div class="icon">
@@ -121,16 +129,18 @@
                     </div>
                 </div>
 
-                <div class="col">
+                <div class="col no-dots" >
                     <h4>About</h4>
-                    <a href="#">About Us</a>
-                    <a href="#">Delivery Information</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms & Condition</a>
-                    <a href="#">Contact Us</a>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Delivery Information</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Condition</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
                 </div>
 
-                <div class="col install">
+                <div class="col">
                     <h4>Install App</h4>
                     <p>From App Store or Google Play</p>
                     <div class="row">

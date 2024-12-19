@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Seller Profile
+{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<div class="container mt-5 p-4 bg-light rounded shadow position-relative">
+    <h2>My Profile</h2>
+
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ seller.store_logo.url }}" alt="Store Logo" class="img-fluid rounded">
+        </div>
+        <div class="col-md-8">
+            <h3>{{ seller.store_name }}</h3>
+            <p>{{ seller.store_description }}</p>
+        </div>
+        <div class="col-md-12">
+            <h3>Store Address</h3>
+            <p>{{ seller.store_address }}</p>
+            <p>{{ seller.store_city }}, {{ seller.store_state }}, {{ seller.store_country }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Analytics</h3>
+            <p>Total Sales: {{ total_sales }}</p>
+            <p>Average Rating: {{ average_rating }}</p>
+        </div>
+    </div>
+
+
+
+<br>
+
+
+{% endblock %}

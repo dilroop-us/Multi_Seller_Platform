@@ -16,6 +16,7 @@ build/
 db.sqlite3
 media/
 staticfiles/
+django.db.backends.postgresql.session.sql
 
 # Logs
 *.log

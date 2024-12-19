@@ -14,8 +14,7 @@ Shop
 
         <form method="post">
             {% csrf_token %}
-            {{ form|crispy }}  {# Render form using crispy tag #}
-
+            {{ form|crispy }}  
             <button type="submit" class="btn btn-primary mt-3 w-100">Login</button>
         </form>
     </div>
