@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Create Product
+{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}    
+
+<div class="container mt-5">
+    <h2>Create Product</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}  {# Render the form using crispy tag #}
+
+        <button type="submit" class="btn btn-primary mt-3">Create</button>
+    </form>
+</div>
+
+
+{% endblock %}

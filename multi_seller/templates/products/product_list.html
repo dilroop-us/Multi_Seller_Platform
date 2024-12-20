@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Edit - Profile
+{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+
+  <h2>Your Products</h2>
+  <a href="{% url 'create_product' %}">Create new product</a>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock Quantity</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+        <tr>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.stock_quantity }}</td>
+          <td>
+            <a href="{% url 'update_product' pk=product.pk %}">Edit</a>
+            <a href="{% url 'delete_product' pk=product.pk %}">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
