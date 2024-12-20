@@ -43,16 +43,16 @@ def user_logout(request):
 
 @login_required
 @never_cache
-def profile_view(request, pk):
-    profile = UserProfile.objects.get(user_id=pk)
+def profile_view(request):
+    profile = UserProfile.objects.get(user=request.user)
     messages.success(request, 'You have been logged in successfully!')
     return render(request, 'users/profile.html', {'profile': profile})
 
 
 @login_required
 @never_cache
-def edit_profile(request, pk):
-    profile = UserProfile.objects.get(user_id=pk)
+def edit_profile(request):
+    profile = UserProfile.objects.get(user=request.user)
 
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=profile)

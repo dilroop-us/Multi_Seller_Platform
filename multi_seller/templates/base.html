@@ -55,8 +55,8 @@
                             My Account
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'profile' pk=user.pk %}">View Profile</a>
-                            <a class="dropdown-item" href="{% url 'edit_profile' pk=user.pk %}">Edit Profile</a>
+                            <a class="dropdown-item" href="{% url 'profile'  %}">View Profile</a>
+                            <a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a>
                             <a class="dropdown-item" href="">My Wishlist</a>
                             <a class="dropdown-item" href="">Track Your Order</a>
                             <a class="dropdown-item" href="">Help</a>
@@ -71,8 +71,9 @@
                             Seller Dashboard
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'sales' pk=request.user.seller.pk %}">Sales Analytics</a>
-                            <a class="dropdown-item" href="{% url 'seller_profile' pk=request.user.seller.pk %}">Seller Profile</a>
+                            <a class="dropdown-item" href="{% url 'seller_profile' %}">Seller Profile</a>
+                            <a class="dropdown-item" href="{% url 'sales' %}">Sales Analytics</a>
+                            
                         </div>
                     </li>
                     {% endif %}

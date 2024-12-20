@@ -12,7 +12,7 @@ from django.views.decorators.cache import never_cache
 def seller_register(request):
     if hasattr(request.user, 'seller'):
         messages.warning(request, 'You already have a seller account. Please login to your seller account.')
-        return redirect('seller_profile', pk=request.user.seller.pk)  # Redirect to existing seller profile
+        return redirect('seller_profile')  # Redirect to existing seller profile
     
     if request.method == 'POST':
         form = SellerForm(request.POST, request.FILES)
@@ -34,7 +34,7 @@ def seller_register(request):
 
 @never_cache
 @login_required
-def seller_profile(request, pk):
+def seller_profile(request):
     try:
         seller = request.user.seller  
     except seller.DoesNotExist:
