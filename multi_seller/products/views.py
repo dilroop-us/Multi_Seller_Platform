@@ -20,7 +20,7 @@ def seller_products(request):
 
 @never_cache
 @login_required
-def product_details(request, pk):
+def seller_product_details(request, pk):
     seller = get_object_or_404(Seller, user=request.user)
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'products/product_details.html', {'product': product})    
@@ -28,7 +28,7 @@ def product_details(request, pk):
 
 @never_cache
 @login_required
-def create_product(request):
+def seller_create_product(request):
     seller = get_object_or_404(Seller, user=request.user)   
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
@@ -49,7 +49,7 @@ def create_product(request):
 
 @never_cache
 @login_required
-def update_product(request, pk):
+def seller_update_product(request, pk):
     seller = get_object_or_404(Seller, user=request.user)
     product = get_object_or_404(Product, pk=pk, seller=seller)
     if request.method == 'POST':
@@ -69,7 +69,7 @@ def update_product(request, pk):
 
 @never_cache
 @login_required
-def delete_product(request, pk):
+def seller_delete_product(request, pk):
     seller = get_object_or_404(Seller, user=request.user)
     product = get_object_or_404(Product, pk=pk, seller=seller)
     if request.method == 'POST':

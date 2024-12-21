@@ -10,6 +10,8 @@ urlpatterns = [
     path('', include('users.urls')),
     path('', include('sellers.urls')),
     path('', include('products.urls')),
+    path('', include('cart.urls')),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 if settings.DEBUG:

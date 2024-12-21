@@ -37,6 +37,9 @@ Shop
                             <p>{{ product.description }}</p>
                             <p><s> ${{ product.price }}</s></p>
                             <p> ${{ product.get_discounted_price }}</p>
+                            <a href="{% url 'details' product.id %}" class="btn btn-primary">View Details</a>
+                            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+                            
                         </div>
                         </div>
                 </div>

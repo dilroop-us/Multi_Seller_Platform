@@ -74,7 +74,7 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="{% url 'seller_profile' %}">Seller Profile</a>
                             <a class="dropdown-item" href="{% url 'seller_products' %}">My Products</a>
-                            <a class="dropdown-item" href="{% url 'create_product' %}">Create Product</a>
+                            <a class="dropdown-item" href="{% url 'seller_create_product' %}">Create Product</a>
                             <a class="dropdown-item" href="{% url 'sales' pk=request.user.seller.id %}">Sales Analytics</a>
                             
                         </div>
@@ -105,7 +105,8 @@
         {% endif %}
     </div>
 
-    <main class="container mt-4">{% block content %} {% endblock %}</main>
+    <main class="container mt-4">{% block content %} {% endblock %}</main><br>
+
 
     <!-- FOOTER -->
     <footer class="section-p1 bg-light">
@@ -166,6 +167,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Add CSRF token to HTMX requests
+        document.addEventListener('htmx:configRequest', function(event) {
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            event.detail.headers['X-CSRFToken'] = csrftoken;
+        });
+    </script>
+    
 </body>
 
 </html>

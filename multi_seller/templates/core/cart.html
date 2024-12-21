@@ -1,19 +1,116 @@
 {% extends 'base.html' %}
 
-
-{% block title %}
-
-Shop
-    
-{% endblock  %}
-    
-
+{% block title %}Shopping Cart{% endblock %}
 
 {% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Your Shopping Cart</h1>
 
-    
+    {% if cart.cartitem_set.count %}
+    <div class="row">
+        <!-- Left Section: Cart Items -->
+        <div class="col-md-8">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart.cartitem_set.all %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>
+                            <!-- HTMX increase quantity -->
+                            <button hx-post="{% url 'update_cart_quantity' item.id 'increase' %}" 
+                                    hx-target="#item-{{ item.id }}-quantity, #item-{{ item.id }}-price, #order-summary"
+                                    hx-swap="outerHTML" 
+                                    class="btn btn-outline-success btn-sm">
+                                +
+                            </button>
+                            <span id="item-{{ item.id }}-quantity" class="mx-3">{{ item.quantity }}</span>
+                            <!-- HTMX decrease quantity -->
+                            <button hx-post="{% url 'update_cart_quantity' item.id 'decrease' %}" 
+                                    hx-target="#item-{{ item.id }}-quantity, #item-{{ item.id }}-price, #order-summary"
+                                    hx-swap="outerHTML" 
+                                    class="btn btn-outline-danger btn-sm">
+                                -
+                            </button>
+                        </td>
+                        <td>{{ item.product.get_discounted_price }}</td>
+                        <td>
+                            <span id="item-{{ item.id }}-price" class="mx-3">{{ item.get_total_price }}</span>
+                        </td>
+                        <td>
+                            <form method="POST" action="{% url 'remove_from_cart' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
+        <!-- Right Section: Order Summary -->
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Order Summary</h4>
+                    <hr>
+                    <div>
+                        <table class="table table-striped">
+                            <tbody>
+                                {% for item in cart.cartitem_set.all %}
+                                <tr>
+                                    <td>{{ item.product.name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>${{ item.product.get_discounted_price }}</td>
+                                    <td>${{ item.get_total_price }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <hr>
+                    </div>
+                    <span>
+                        <p class="card-text" id="order-summary">
+                            <strong>Subtotal:</strong> ${{ total_price }}
+                        </p>
+                    </span>
+                    <a href="" class="btn btn-primary w-100 mt-3">Proceed to Checkout</a>
+                    <a href="{% url 'shop' %}" class="btn btn-secondary w-100 mt-3">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    {% else %}
+    <div class="text-center">
+        <p class="text-muted">Your cart is currently empty.</p>
+        <a href="{% url 'shop' %}" class="btn btn-secondary">Continue Shopping</a>
+    </div>
+    {% endif %}
+</div>
 
+<script>
+    // Add CSRF token to HTMX requests
+    document.addEventListener('htmx:configRequest', function(event) {
+        var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        event.detail.headers['X-CSRFToken'] = csrftoken;
+    });
+</script>
+
+<style>
+    .btn-sm {
+        padding: 0.3rem 0.6rem;
+        font-size: 1rem;
+    }
+</style>
 
 {% endblock %}
