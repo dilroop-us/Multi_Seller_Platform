@@ -16,10 +16,14 @@
 
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.2/dist/htmx.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.2/dist/ext/fetch.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.7.0/dist/ext/json-enc.js"></script>
 
     <!-- Alpine.js -->
-    <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.5/cdn.min.js" defer></script>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -164,9 +168,9 @@
     </footer>
 
     <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         // Add CSRF token to HTMX requests
         document.addEventListener('htmx:configRequest', function(event) {

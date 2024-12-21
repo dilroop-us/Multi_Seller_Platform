@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponse
 
 
+@login_required
 def get_or_create_cart(request):
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -16,6 +17,8 @@ def get_or_create_cart(request):
     return cart
 
 
+
+@login_required
 @transaction.atomic
 def add_to_cart(request, product_id, quantity=1):
     cart = get_or_create_cart(request)  
@@ -27,7 +30,7 @@ def add_to_cart(request, product_id, quantity=1):
     return cart_item
 
 
-
+@login_required
 def add_to_cart_view(request, product_id):
     quantity = request.POST.get('quantity', 1) 
     try:
@@ -37,7 +40,7 @@ def add_to_cart_view(request, product_id):
         return redirect('cart')  
 
 
-
+@login_required
 def cart_view(request):
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -49,13 +52,15 @@ def cart_view(request):
     return render(request, 'core/cart.html', {'cart': cart, 'total_price': total_price})
 
 
-
+@login_required
 def calculate_cart_total(cart):
-    total_price = sum(item.get_total_price() for item in cart.cartitem_set.all())
-    return total_price
+    total = 0
+    for item in cart.cartitem_set.all():
+        total += item.product.get_discounted_price() * item.quantity
+    return total
 
 
-# Function to merge carts (when a user logs in)
+@login_required
 def merge_carts(request, user_cart, session_cart):
     session_cart = Cart.objects.filter(session_id=session_cart.session_id).first()
     if session_cart:
@@ -65,49 +70,144 @@ def merge_carts(request, user_cart, session_cart):
         session_cart.delete()  
 
 
+@login_required
 def remove_from_cart(request, item_id):
     CartItem.objects.filter(id=item_id).delete()
     return redirect('cart')
 
 
+
+
 def update_cart_quantity(request, item_id, action):
-    item = CartItem.objects.get(id=item_id)
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    cart = cart_item.cart
 
     if action == 'increase':
-        item.quantity += 1
-    elif action == 'decrease' and item.quantity > 1:
-        item.quantity -= 1
+        cart_item.quantity += 1
+    elif action == 'decrease' and cart_item.quantity > 1:
+        cart_item.quantity -= 1
+
+    cart_item.save()
+    cart_total = cart.get_total_price()
+
+    return JsonResponse({
+        'quantity': cart_item.quantity,
+        'item_total': cart_item.get_total_price(),
+        'cart_total': cart_total
+    })
+
+
+
+
+
+
+
+# @login_required
+# def update_cart_quantity(request, item_id, action):
+#     item = CartItem.objects.get(id=item_id)
+
+#     if action == 'increase':
+#         item.quantity += 1
+#     elif action == 'decrease' and item.quantity > 1:
+#         item.quantity -= 1
     
-    item.save()
+#     item.save()
 
-    # Fetch updated cart items for the partial render
-    updated_item = item
-    updated_quantity_html = render_to_string('cart/quantity_update.html', {'item': updated_item})
+#     # Fetch updated cart items for the partial render
+#     updated_item = item
+#     updated_quantity_html = render_to_string('cart/item_quantity.html', {'item': updated_item})
 
-    # Returning the updated quantity span only
-    return HttpResponse(updated_quantity_html)
-
-
+#     # Returning the updated quantity span only
+#     return HttpResponse(updated_quantity_html)
 
 
-def item_total(request, item_id):
-    item = CartItem.objects.get(id=item_id)
-    total = update_cart_quantity(request, item_id, 'increase') * item.product.price or update_cart_quantity(request, item_id, 'decrease') * item.product.price
+
+# @login_required
+# def update_cart_quantity(request, item_id, action):
+#     try:
+#         item = CartItem.objects.get(id=item_id)
+
+#         # Make sure item has a valid product
+#         if not hasattr(item, 'product'):
+#             raise ValueError("CartItem does not have a valid product reference")
+
+#         if action == 'increase':
+#             item.quantity += 1
+#         elif action == 'decrease' and item.quantity > 1:
+#             item.quantity -= 1
+
+#         item.save()
+
+#         # Correctly access the product's discounted price and calculate total price
+#         updated_item_total = item.product.get_discounted_price() * item.quantity  # Use product's method for discounted price
+
+#         # Calculate the subtotal for the entire cart
+#         cart = get_or_create_cart(request)
+#         subtotal = calculate_cart_total(cart)
+
+#         # Render the updated HTML parts for quantity, item total, and subtotal
+#         updated_item_total_html = render_to_string('cart/item_total.html', {'total': updated_item_total, 'item': item})
+#         updated_quantity_html = render_to_string('cart/item_quantity.html', {'item': item})
+#         updated_subtotal_html = render_to_string('cart/subtotal.html', {'subtotal': subtotal})
+
+#         return HttpResponse(
+#             f"{updated_item_total_html}{updated_quantity_html}{updated_subtotal_html}"
+#         )
+
+#     except CartItem.DoesNotExist:
+#         return HttpResponse("Cart item not found", status=404)
+#     except Exception as e:
+#         return HttpResponse(f"Error: {str(e)}", status=500)
+
+
+
+# @login_required
+# def update_item_total(request, item_id):
     
-    item.save()
+#     item = CartItem.objects.get(id=item_id)
+
+#     updated_item_total = item.product.get_discounted_price() * item.quantity
+
+#     updated_item_total_html = render_to_string('cart/item_total.html', {'total': updated_item_total, 'item': item})
+
+#     return HttpResponse(updated_item_total_html)
+
     
-    updated_item_total = total
-    updated_item_total_html = render_to_string('cart/item_total.html', {'item': item, 'total': updated_item_total})
-    
-    return HttpResponse(updated_item_total_html)
 
 
-def subtotal(request):
-    cart_items = CartItem.objects.filter(cart__user=request.user)  # Assuming the cart is tied to the user
-    subtotal = sum(item.quantity * item.product.price for item in cart_items)  # Calculate subtotal for all items
+# @login_required
+# def update_subtotal(request):
+#     try:
+#         # Get or create the cart
+#         cart = get_or_create_cart(request)
 
-    # Fetch the updated subtotal HTML
-    subtotal_html = render_to_string('cart/subtotal.html', {'subtotal': subtotal})
+#         # Calculate the updated subtotal
+#         updated_subtotal = calculate_cart_total(cart)
 
-    # Return the updated subtotal span only
-    return HttpResponse(subtotal_html)
+#         # Render the updated subtotal HTML
+#         updated_subtotal_html = render_to_string('cart/subtotal.html', {'subtotal': updated_subtotal})
+
+#         return HttpResponse(updated_subtotal_html)
+
+#     except Exception as e:
+#         return HttpResponse(f"Error: {str(e)}", status=500)
+
+
+
+
+
+# def update_cart_quantity(request, item_id, action):
+#     cart_item = get_object_or_404(CartItem, id=item_id)
+#     cart = cart_item.cart
+
+#     if action == 'increase':
+#         cart_item.quantity += 1
+#     elif action == 'decrease' and cart_item.quantity > 1:
+#         cart_item.quantity -= 1
+#     cart_item.save()
+
+#     return JsonResponse({
+#         'quantity': cart_item.quantity,
+#         'item_total': cart_item.get_total_price(),
+#         'cart_total': cart.get_total_price()
+#     })

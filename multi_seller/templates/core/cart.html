@@ -8,8 +8,7 @@
 
     {% if cart.cartitem_set.count %}
     <div class="row">
-        <!-- Left Section: Cart Items -->
-        <div class="col-md-8">
+        <div class="col-md-10">
             <table class="table table-striped">
                 <thead class="thead-dark">
                     <tr>
@@ -22,73 +21,52 @@
                 </thead>
                 <tbody>
                     {% for item in cart.cartitem_set.all %}
-                    <tr>
+                    <tr data-item-id="{{ item.id }}">
                         <td>{{ item.product.name }}</td>
                         <td>
-                            <!-- HTMX increase quantity -->
-                            <button hx-post="{% url 'update_cart_quantity' item.id 'increase' %}" 
-                                    hx-target="#item-{{ item.id }}-quantity, #item-{{ item.id }}-price, #order-summary"
-                                    hx-swap="outerHTML" 
-                                    class="btn btn-outline-success btn-sm">
+                            <!-- Increase quantity -->
+                            <button class="btn btn-outline-success btn-sm update-quantity" 
+                                    data-action="increase" 
+                                    data-url="{% url 'update_cart_quantity' item.id 'increase' %}">
                                 +
                             </button>
-                            <span id="item-{{ item.id }}-quantity" class="mx-3">{{ item.quantity }}</span>
-                            <!-- HTMX decrease quantity -->
-                            <button hx-post="{% url 'update_cart_quantity' item.id 'decrease' %}" 
-                                    hx-target="#item-{{ item.id }}-quantity, #item-{{ item.id }}-price, #order-summary"
-                                    hx-swap="outerHTML" 
-                                    class="btn btn-outline-danger btn-sm">
+
+                            <span class="mx-3 item-quantity">{{ item.quantity }}</span>
+
+                            <!-- Decrease quantity -->
+                            <button class="btn btn-outline-danger btn-sm update-quantity" 
+                                    data-action="decrease" 
+                                    data-url="{% url 'update_cart_quantity' item.id 'decrease' %}">
                                 -
                             </button>
                         </td>
                         <td>{{ item.product.get_discounted_price }}</td>
                         <td>
-                            <span id="item-{{ item.id }}-price" class="mx-3">{{ item.get_total_price }}</span>
+                            <span class="item-total">{{ item.get_total_price }}</span>
                         </td>
                         <td>
                             <form method="POST" action="{% url 'remove_from_cart' item.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                <button type="submit" class="btn btn-danger btn-m">X</button>
                             </form>
                         </td>
                     </tr>
                     {% endfor %}
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>Subtotal:</td>
+                        <td>
+                            <span id="cart-subtotal">{{ cart.get_total_price }}</span>
+                        </td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Right Section: Order Summary -->
-        <div class="col-md-4">
-            <div class="card shadow-lg">
-                <div class="card-body">
-                    <h4 class="card-title text-center">Order Summary</h4>
-                    <hr>
-                    <div>
-                        <table class="table table-striped">
-                            <tbody>
-                                {% for item in cart.cartitem_set.all %}
-                                <tr>
-                                    <td>{{ item.product.name }}</td>
-                                    <td>{{ item.quantity }}</td>
-                                    <td>${{ item.product.get_discounted_price }}</td>
-                                    <td>${{ item.get_total_price }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <hr>
-                    </div>
-                    <span>
-                        <p class="card-text" id="order-summary">
-                            <strong>Subtotal:</strong> ${{ total_price }}
-                        </p>
-                    </span>
-                    <a href="" class="btn btn-primary w-100 mt-3">Proceed to Checkout</a>
-                    <a href="{% url 'shop' %}" class="btn btn-secondary w-100 mt-3">Continue Shopping</a>
-                </div>
-            </div>
+        <div class="col-md-2">
+            <a class="btn btn-primary" href="">Proceed to Checkout</a>
         </div>
-    </div>
 
     {% else %}
     <div class="text-center">
@@ -98,11 +76,37 @@
     {% endif %}
 </div>
 
+<!-- CSRF token for AJAX -->
 <script>
-    // Add CSRF token to HTMX requests
-    document.addEventListener('htmx:configRequest', function(event) {
-        var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        event.detail.headers['X-CSRFToken'] = csrftoken;
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+
+    $(document).ready(function () {
+        $('.update-quantity').click(function (e) {
+            e.preventDefault();
+            let button = $(this);
+            let url = button.data('url');
+            let row = button.closest('tr');
+            let itemId = row.data('item-id');
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    csrfmiddlewaretoken: getCSRFToken(),
+                },
+                success: function (response) {
+                    // Update quantity and total price dynamically
+                    row.find('.item-quantity').text(response.quantity);
+                    row.find('.item-total').text(response.item_total);
+                    $('#cart-subtotal').text(response.cart_total);
+                },
+                error: function () {
+                    alert('Error updating cart. Please try again.');
+                }
+            });
+        });
     });
 </script>
 

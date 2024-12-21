@@ -15,6 +15,9 @@ class Cart(models.Model):
             return f"Cart for {self.user.username}"
         else:
             return f"Cart for {self.session_id}"
+    
+    def get_total_price(self):
+        return sum(item.get_total_price() for item in self.cartitem_set.all())
 
 
 class CartItem(models.Model):
@@ -24,7 +27,11 @@ class CartItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
+    
+    def get_discounted_price(self):
+        discounted_price = self.product.price - (self.product.price * (self.product.discount / 100))
+        return discounted_price
+    
     def get_total_price(self):
         return self.product.get_discounted_price() * self.quantity
 
