@@ -5,13 +5,13 @@ from django.contrib.auth.models import User
 
 
 class Product(models.Model):
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='products')
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     stock = models.IntegerField()
-    image = models.ImageField(upload_to='products/')
+    image = models.ImageField(upload_to='products_images/', null=True, blank=True)
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -84,6 +84,7 @@ class Category(models.Model):
         ("Characters", "Characters"),
         ("Bundles", "Bundles"),
         # Gaming Peripherals
+        ("", "Gaming Peripherals"),
         ("Monitors", "Monitors"),
         ("Speakers", "Speakers"),
         ("Microphones", "Microphones"),

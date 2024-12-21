@@ -19,6 +19,7 @@
 
     <!-- Alpine.js -->
     <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.5/cdn.min.js" defer></script>
 </head>
 
 <body>
@@ -74,7 +75,7 @@
                             <a class="dropdown-item" href="{% url 'seller_profile' %}">Seller Profile</a>
                             <a class="dropdown-item" href="{% url 'seller_products' %}">My Products</a>
                             <a class="dropdown-item" href="{% url 'create_product' %}">Create Product</a>
-                            <a class="dropdown-item" href="{% url 'sales' %}">Sales Analytics</a>
+                            <a class="dropdown-item" href="{% url 'sales' pk=request.user.seller.id %}">Sales Analytics</a>
                             
                         </div>
                     </li>

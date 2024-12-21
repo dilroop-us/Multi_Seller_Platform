@@ -51,7 +51,7 @@ def sales(request, pk):
     if not hasattr(request.user, 'seller'):
         raise Http404("Seller not found")
     try:
-        seller = request.user.seller  
+        seller = request.user.seller.id
     except seller.DoesNotExist:
         raise Http404("Seller not found")
     

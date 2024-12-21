@@ -31,20 +31,30 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+THIRD_PARTY_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
+]
+
+LOCAL_APPS = [
     'core',
     'users',
     'sellers',
     'products',
+    'cart',
 ]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS    
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -138,6 +148,8 @@ USE_TZ = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_URL = '/static/'
+
+
 
 
 STATICFILES_DIRS = [

@@ -1,3 +1,6 @@
+SECRET_KEY = 'django-insecure-=9hebmsm)3afa(#i@@d#2@$qcd5skz*0d&he!v=$na_+7q-12-'
+DEBUG = True
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -24,3 +27,11 @@ django.db.backends.postgresql.session.sql
 # IDE settings
 .idea/
 .vscode/
+
+# Database
+multi_seller
+postgres
+postgres
+localhost
+5432
+
