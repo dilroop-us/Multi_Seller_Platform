@@ -126,9 +126,11 @@ class Category(models.Model):
 class ProductCategory(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_categories')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product_categories')
+    sub_category = models.CharField(max_length=255, default='Default SubCategory')
+
     
     def __str__(self):
-        return f'{self.product.name} - {self.category.name}'
+        return f'{self.product.name} - {self.category.name} / {self.sub_category.name}'
     
     
     

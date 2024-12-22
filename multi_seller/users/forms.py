@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import User, UserProfile
 
+
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -18,6 +19,10 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['profile_image', 'street_address', 'city', 'state', 'postal_code', 'country', 'date_of_birth']
+        
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        }
 
     def clean_country(self):
         country = self.cleaned_data.get('country')

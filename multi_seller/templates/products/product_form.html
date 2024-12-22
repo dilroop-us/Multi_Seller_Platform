@@ -11,14 +11,14 @@
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Create Product</h2>
 
-    <form method="post" class="border p-4 shadow-sm rounded">
+    <form method="post" class="border p-4 shadow-sm rounded" enctype="multipart/form-data">
         {% csrf_token %}
         
         <div class="form-group mb-3">
             {{ form|crispy }}
         </div>
         
-        <button type="submit" class="btn btn-primary btn-block">Create Product</button>
+        <button type="submit" class="btn btn-primary btn-block">Update Product</button>
     </form>
 </div>
 

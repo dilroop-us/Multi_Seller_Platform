@@ -41,4 +41,4 @@ class ProductForm(forms.ModelForm):
 class ProductUpdateForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['is_available', 'stock', 'discount']
+        fields = ['is_available', 'stock', 'discount', 'image']

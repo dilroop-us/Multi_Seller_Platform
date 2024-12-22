@@ -1,0 +1,37 @@
+SECRET_KEY = 'django-insecure-=9hebmsm)3afa(#i@@d#2@$qcd5skz*0d&he!v=$na_+7q-12-'
+DEBUG = True
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+.env/
+myenv
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# Django files
+db.sqlite3
+media/
+staticfiles/
+django.db.backends.postgresql.session.sql
+
+# Logs
+*.log
+
+# IDE settings
+.idea/
+.vscode/
+
+# Database
+multi_seller
+postgres
+postgres
+localhost
+5432
+

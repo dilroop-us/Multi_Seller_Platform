@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from products.models import Product
+from products.models import Product, Category
 from cart.models import CartItem
 
 
@@ -13,6 +13,21 @@ def about(request):
 def shop(request):
     products = Product.objects.all()
     return render(request, "core/shop.html", {"products": products})
+
+
+def shop_category(request, category):
+    try:
+        # Get the category object based on the category passed in the URL
+        category_obj = Category.objects.get(parent_category=category)
+        
+        # Get all products associated with this category
+        products = Product.objects.filter(product_categories__category=category_obj)
+        
+    except Category.DoesNotExist:
+        # If the category does not exist, handle the error gracefully
+        products = []
+    
+    return render(request, 'core/shop.html', {'products': products, 'category': category})
 
 
 def details(request, pk):

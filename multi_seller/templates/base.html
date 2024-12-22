@@ -46,11 +46,21 @@
                             Categories
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Category 1</a>
-                            <a class="dropdown-item" href="#">Category 2</a>
-                            <a class="dropdown-item" href="#">Category 3</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Gaming Consoles' %}">Gaming Consoles</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='PC Gaming' %}">PC Gaming</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Gaming Accessories' %}">Gaming Accessories</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Games' %}">Games</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='In-Game Items' %}">In-Game Items</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Gaming Peripherals' %}">Gaming Peripherals</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Streaming Equipment' %}">Streaming Equipment</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Merchandise' %}">Merchandise</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Mobile Gaming' %}">Mobile Gaming</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Gaming Subscriptions' %}">Gaming Subscriptions</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Board and Card Games' %}">Board and Card Games</a>
+                            <a class="dropdown-item" href="{% url 'shop_category' category='Others' %}">Others</a>
                         </div>
-                    </li>
+                        
+                    </li>     
 
 
                     {% if request.user.is_authenticated %}

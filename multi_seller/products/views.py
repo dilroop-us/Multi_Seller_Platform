@@ -57,7 +57,7 @@ def seller_update_product(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Product updated successfully')
-            return redirect('product_details', pk=product.pk)
+            return redirect('seller_products')
         else:
             messages.error(request, 'Failed to update product')
     else:
