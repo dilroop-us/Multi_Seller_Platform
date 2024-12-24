@@ -9,18 +9,18 @@ class Seller(models.Model):
         related_name='seller',
     )
     store_name = models.CharField(max_length=255, unique=True)
-    store_description = models.TextField()
     store_logo = models.ImageField(upload_to='store_logos/')
-    store_address = models.CharField(max_length=255)
+    store_address_line_1 = models.CharField(max_length=255)
+    store_address_line_2 = models.CharField(max_length=255, null=True, blank=True)
     store_city = models.CharField(max_length=100)
     store_state = models.CharField(max_length=100)
     store_country = models.CharField(max_length=100)
+    store_zip_code = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    employee_id = models.CharField(max_length=100, unique=True)  # for verification
+    employee_id = models.CharField(max_length=100, unique=True, null=True, blank=True)  # for verification
 
     def __str__(self):
         return self.store_name
-
 
 
 

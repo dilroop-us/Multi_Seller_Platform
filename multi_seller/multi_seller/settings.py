@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-=9hebmsm)3afa(#i@@d#2@$qcd5skz*0d&he!v=$na_+7q-12-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,8 +42,11 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'crispy_forms',
-    'crispy_bootstrap5',
+    'crispy_tailwind',
     'debug_toolbar',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
 ]
 
 LOCAL_APPS = [
@@ -57,6 +60,8 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS    
 
+TAILWIND_APP_NAME = 'theme'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,8 +72,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
     
 ]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+
 
 ROOT_URLCONF = 'multi_seller.urls'
 
@@ -90,9 +103,9 @@ TEMPLATES = [
 ]
 
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'tailwind'
 
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'tailwind'
 
 WSGI_APPLICATION = 'multi_seller.wsgi.application'
 

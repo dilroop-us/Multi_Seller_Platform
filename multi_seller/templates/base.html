@@ -1,3 +1,4 @@
+{% load static tailwind_tags %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -9,186 +10,163 @@
     <meta name="X-UA-Compatible" content="IE=edge" />
     <title>{% block title %} {% endblock %}</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
     <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.9.2/dist/htmx.min.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.2/dist/ext/fetch.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.7.0/dist/ext/json-enc.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"
+        integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+        crossorigin="anonymous"></script>
 
-    <!-- Alpine.js -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.5/cdn.min.js" defer></script>
-
-    <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Tailwind CSS -->
+    {% tailwind_css %}
 </head>
 
-<body>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
     <!-- HEADER -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="{% static 'img/logo.png' %}" alt="Logo" height="40">
+    <nav class="bg-white shadow">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="text-xl font-semibold text-gray-700">
+                <img src="{% static 'img/logo.png' %}" alt="Logo" class="h-10">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'shop' %}">Shop</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-toggle="dropdown">
-                            Categories
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Gaming Consoles' %}">Gaming Consoles</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='PC Gaming' %}">PC Gaming</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Gaming Accessories' %}">Gaming Accessories</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Games' %}">Games</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='In-Game Items' %}">In-Game Items</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Gaming Peripherals' %}">Gaming Peripherals</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Streaming Equipment' %}">Streaming Equipment</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Merchandise' %}">Merchandise</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Mobile Gaming' %}">Mobile Gaming</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Gaming Subscriptions' %}">Gaming Subscriptions</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Board and Card Games' %}">Board and Card Games</a>
-                            <a class="dropdown-item" href="{% url 'shop_category' category='Others' %}">Others</a>
-                        </div>
-                        
-                    </li>     
 
+            <div class="block lg:hidden">
+                <button class="text-gray-700 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
 
-                    {% if request.user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
-                            data-toggle="dropdown">
-                            My Account
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'profile'  %}">View Profile</a>
-                            <a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a>
-                            <a class="dropdown-item" href="">My Wishlist</a>
-                            <a class="dropdown-item" href="">Track Your Order</a>
-                            <a class="dropdown-item" href="">Help</a>
-                            <a class="dropdown-item" href="{% url 'seller_register' %}">Become a Seller</a>
-                            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
-                        </div>
-                    </li>
-                    {% if request.user.seller %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="sellerDropdown" role="button"
-                            data-toggle="dropdown">
-                            Seller Dashboard
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'seller_profile' %}">Seller Profile</a>
-                            <a class="dropdown-item" href="{% url 'seller_products' %}">My Products</a>
-                            <a class="dropdown-item" href="{% url 'seller_create_product' %}">Create Product</a>
-                            <a class="dropdown-item" href="{% url 'sales' pk=request.user.seller.id %}">Sales Analytics</a>
-                            
-                        </div>
-                    </li>
-                    {% endif %}
-                    {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Sign In</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
-                    {% endif %}
+            <div class="hidden lg:flex items-center space-x-6">
+                <a href="{% url 'home' %}" class="text-gray-700 hover:text-blue-500">Home</a>
+                <a href="{% url 'shop' %}" class="text-gray-700 hover:text-blue-500">Shop</a>
 
+                <div class="relative group overflow-visible">
+                    <button class="text-gray-700 hover:text-blue-500 focus:outline-none"> Categories <i
+                            class="fas fa-chevron-down ml-1"></i>
+                    </button>
+                    <div class="absolute hidden bg-white shadow-md rounded-md group-hover:block w-48 z-50">
+                        <a href="{% url 'shop_category' category='Gaming Consoles' %}"
+                            class="block px-4 py-2 hover:bg-gray-100">Gaming
+                            Consoles</a>
+                        <a href="{% url 'shop_category' category='PC Gaming' %}"
+                            class="block px-4 py-2 hover:bg-gray-100">PC
+                            Gaming</a>
+                        <a href="{% url 'shop_category' category='Gaming Accessories' %}"
+                            class="block px-4 py-2 hover:bg-gray-100">Gaming
+                            Accessories</a>
+                        <a href="{% url 'shop_category' category='Games' %}"
+                            class="block px-4 py-2 hover:bg-gray-100">Games</a>
+                    </div>
+                </div>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cart' %}">
-                            <i class="far fa-shopping-bag"></i> Cart
-                        </a>
-                    </li>
-                </ul>
+                {% if request.user.is_authenticated %}
+                <div class="relative group">
+                    <button class="text-gray-700 hover:text-blue-500 focus:outline-none">
+                        My Account <i class="fas fa-chevron-down ml-1"></i>
+                    </button>
+                    <div class="absolute hidden bg-white shadow-md rounded-md group-hover:block w-48">
+                        <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-gray-100">View Profile</a>
+                        <a href="{% url 'edit_profile' %}" class="block px-4 py-2 hover:bg-gray-100">Edit Profile</a>
+                        <a href="" class="block px-4 py-2 hover:bg-gray-100">Wish List</a>
+                        <a href="" class="block px-4 py-2 hover:bg-gray-100">Orders</a>
+                        <a href="" class="block px-4 py-2 hover:bg-gray-100">Addresses</a>
+                        <a href="" class="block px-4 py-2 hover:bg-gray-100">Refunds</a>
+                    </div>
+                </div>
+
+                {% if request.user.seller %}
+                <div class="relative group">
+                    <button class="text-gray-700 hover:text-blue-500 focus:outline-none">
+                        Seller Dashboard <i class="fas fa-chevron-down ml-1"></i>
+                    </button>
+                    <div class="absolute hidden bg-white shadow-md rounded-md group-hover:block w-48">
+                        <a href="{% url 'seller_profile' %}" class="block px-4 py-2 hover:bg-gray-100">Seller Profile</a>                            
+                        <a href="{% url 'seller_products' %}" class="block px-4 py-2 hover:bg-gray-100">My Products</a>
+                        <a href="{% url 'seller_create_product' %}" class="block px-4 py-2 hover:bg-gray-100">Create Product</a>
+                        <a href="" class="block px-4 py-2 hover:bg-gray-100">Orders</a>
+                        <a href="" class="block px-4 py-2 hover:bg-gray-100">Refunds</a>
+                        <a href="" class="block px-4 py-2 hover:bg-gray-100">Reviews</a>
+                        <a href="" class="block px-4 py-2 hover:bg-gray-100">Messages</a>
+                    </div>
+                </div>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-gray-100">Log Out</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="text-gray-700 hover:text-blue-500">Sign In</a>
+                <a href="{% url 'register' %}" class="text-gray-700 hover:text-blue-500">Register</a>
+                {% endif %}
+                
+                <a href="{% url 'contact' %}" class="text-gray-700 hover:text-blue-500">Contact Us</a>
+                <a href="{% url 'cart' %}" class="text-gray-700 hover:text-blue-500 flex items-center">
+                    <span class="indicator">
+                        <i class="far fa-shopping-cart text-lg"></i>
+                        <span class="indicator-item badge badge-secondary">2</span>
+                    </span>
+                </a>
             </div>
         </div>
     </nav>
 
-
-    <div class="container mt-4 mb-4 text-center">
+    <div class="container mx-auto mt-6 px-6">
         {% if messages %}
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
+        {% for message in messages %}
+        <div class="p-4 mb-4 text-{{ message.tags }} bg-{{ message.tags }}-100 rounded-lg">
+            {{ message }}
+        </div>
+        {% endfor %}
         {% endif %}
     </div>
 
-    <main class="container mt-4">{% block content %} {% endblock %}</main><br>
+    <main class="container mx-auto mt-6 px-6">
+        {% block content %}
 
+        {% endblock %}
+    </main>
 
     <!-- FOOTER -->
-    <footer class="section-p1 bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <img class="logo" src="{% static 'img/logo.png' %}" alt />
-                    <h4>Contact</h4>
-                    <p>
-                        <strong>Address:</strong> 562 Wellington Road,Street 32, San Francisco
-                    </p>
-                    <p>
-                        <strong>Phone:</strong> +1 2222 333 444 / +1 2345 678 900
-                    </p>
-                    <p><strong>Hours:</strong> 09:00 - 18:00 , Mon - Sat</p>
-                    <div class="follow">
-                        <h4>Follow Us</h4>
-                        <div class="icon">
-                            <i class="fab fa-facebook-f"></i>
-                            <i class="fab fa-twitter"></i>
-                            <i class="fab fa-instagram"></i>
-                            <i class="fab fa-pinterest-p"></i>
-                            <i class="fab fa-youtube"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col no-dots" >
-                    <h4>About</h4>
-                    <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Delivery Information</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms & Condition</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                    </ul>
-                </div>
-
-                <div class="col">
-                    <h4>Install App</h4>
-                    <p>From App Store or Google Play</p>
-                    <div class="row">
-                        <img src="{% static 'img/pay/play.jpg' %}" alt class="img-fluid" />
-                        <img src="{% static 'img/pay/app.jpg' %}" alt class="img-fluid" />
-                    </div>
-                    <p>Secure Payment Gateways</p>
-                    <img src="{% static 'img/pay/pay.png' %}" alt class="img-fluid" />
-                </div>
-            </div>
-        </div>
-
-        <div class="copyright text-center">
-            <p>@ 2023, Madewillcreates - HTML CSS Ecommerce Template</p>
+    <footer>
+        <div class="p-2 w-full pt-8 mt-8 border-t border-gray-200 text-center">
+            <a class="text-indigo-500">example@email.com</a>
+            <p class="leading-normal my-5">49 Smith St.
+                <br>Saint Cloud, MN 56301
+            </p>
+            <span class="inline-flex">
+                <a class="text-gray-500">
+                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        class="w-5 h-5" viewBox="0 0 24 24">
+                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                    </svg>
+                </a>
+                <a class="ml-4 text-gray-500">
+                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        class="w-5 h-5" viewBox="0 0 24 24">
+                        <path
+                            d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z">
+                        </path>
+                    </svg>
+                </a>
+                <a class="ml-4 text-gray-500">
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                    </svg>
+                </a>
+                <a class="ml-4 text-gray-500">
+                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        class="w-5 h-5" viewBox="0 0 24 24">
+                        <path
+                            d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z">
+                        </path>
+                    </svg>
+                </a>
+            </span>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script>
-        // Add CSRF token to HTMX requests
-        document.addEventListener('htmx:configRequest', function(event) {
-            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            event.detail.headers['X-CSRFToken'] = csrftoken;
-        });
-    </script>
-    
 </body>
 
 </html>

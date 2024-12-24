@@ -7,14 +7,45 @@
 {% block content %}
 
 {% load crispy_forms_tags %}
-
+<div class="container mt-5">
+    <div class="p-4 bg-white rounded shadow" style=" width: 100%; border: 1px solid #ccc;">
 <form action="" method="post" enctype="multipart/form-data" class="p-5">
-    <h2>Edit Your Profile</h2>
+    <h2 class="text-center mb-4">Edit Your Profile</h2>
     {% csrf_token %}
-    {{ form|crispy }}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form.full_name|as_crispy_field }}
+        </div>
+        <div class="col-md-6">
+            {{ form.address_line_1|as_crispy_field }}
+        </div>
+        <div class="col-md-6">
+            {{ form.address_line_2|as_crispy_field }}
+        </div>
+        <div class="col-md-6">
+            {{ form.city|as_crispy_field }}
+        </div>
+        <div class="col-md-6">
+            {{ form.state|as_crispy_field }}
+        </div>
+        <div class="col-md-6">
+            {{ form.zip_code|as_crispy_field }}
+        </div>
+        <div class="col-md-6">
+            {{ form.country|as_crispy_field }}
+        </div>
+        <div class="col-md-6">
+            {{ form.date_of_birth|as_crispy_field }}
+        </div>
+        <div class="col-md-6">
+            {{ form.profile_image|as_crispy_field }}
+        </div>
+    </div>
     <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
     <a href="{% url 'profile' %}"class="btn btn-secondary mt-3 ml-2">Cancel</a>
 </form>
+</div>
+</div>
 
 
 <br>

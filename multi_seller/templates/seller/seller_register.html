@@ -11,10 +11,48 @@
         
         <h1 class="mb-4">Seller Registration</h1>
         {% csrf_token %}
-        {{ form|crispy }}
+        <div class="row mb-3">
+            <div class="col-md-6 col-12">
+                {{ form.store_name|as_crispy_field }}
+            </div>
+            <div class="col-md-6 col-12">
+                {{ form.store_logo|as_crispy_field }}
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-6 col-12">
+                {{ form.store_address_line_1|as_crispy_field }}
+            </div>
+            <div class="col-md-6 col-12">
+                {{ form.store_address_line_2|as_crispy_field }}
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-6 col-12">
+                {{ form.store_city|as_crispy_field }}
+            </div>
+            <div class="col-md-6 col-12">
+                {{ form.store_state|as_crispy_field }}
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-4 col-12" style="width: 100px;">
+                {{ form.store_zip_code|as_crispy_field }}
+            </div>
+            <div class="col-md-4 col-12">
+                {{ form.store_country|as_crispy_field }}
+            </div>
+            <div class="col-md-4 col-12">
+                {{ form.employee_id|as_crispy_field }}
+            </div>
+        </div>
+        
         <button type="submit" class="btn btn-primary mt-3">Register</button>
     </form>
 
 
 <br>
-{% endblock %}
+{% endblock %}  

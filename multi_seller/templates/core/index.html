@@ -1,38 +1,25 @@
-{% extends 'base.html' %}
-
-
-{% block title %}
-
-Home
-    
-{% endblock  %}
-    
-
+{% extends 'base.html' %} 
+{% load static %}
+{% block title %} Home {% endblock %} 
 
 {% block content %}
-    
 
-    <!-- HERO SECTION -->
-    <section id=" hero" class="text-center py-5 bg-primary text-white">
-        <div class="container">
-            <h1 class="display-3 font-weight-bold">Super Value Deals</h1>
-            <p class="lead mt-3">Save more with coupons & up to 70% off!</p>
-            <button class="btn btn-primary btn-lg mt-4">Shop Now</button>
+<!-- HERO SECTION -->
+<div class="hero bg-base-200 min-h-screen">
+    <div class="hero-content text-center">
+        <div class="max-w-md">
+            <h1 class="text-5xl font-bold">Hello there</h1>
+            <p class="py-10 text-2xl text-gray-500 leading-relaxed ">
+                Provident cupiditate voluptatem et in. Quaerat fugiat ut
+                assumenda excepturi exercitationem quasi. In deleniti eaque aut
+                repudiandae et a id nisi.
+            </p>
+            <button class="btn btn-primary">Get Started</button>
         </div>
-    </section>
+    </div>
+</div>
 
-    <!-- PRODUCT SECTION -->
-    <section id="products" class="py-5 container" x-data="{ open: true }">
-        <h2 class="mb-4">Featured Products</h2>
-        <div id="product-list" 
-            hx-get="/products/"
-            hx-trigger="load"
-            hx-target="#product-list"
-            hx-swap="innerHTML"
-            class="row mt-4">
-        </div>
-    </section>
+<!-- PRODUCT SECTION -->
+<section></section>
 
-
-
-{% endblock  %}
+{% endblock %}

@@ -1,61 +1,75 @@
 {% extends 'base.html' %}
-
-{% block title %}Shopping Cart{% endblock %}
+{% load static %}
+{% block title %}
+Cart
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4 text-center">Your Shopping Cart</h1>
+
+{% if user.is_authenticated %}
+<div class="container mx-auto">
+    <h1 class="mb-4 text-center text-2xl font-bold">Your Shopping Cart</h1>
 
     {% if cart.cartitem_set.count %}
-    <div class="row">
-        <div class="col-md-10">
-            <table class="table table-striped">
-                <thead class="thead-dark">
+    <div class="flex flex-wrap">
+        <div class="w-full md:w-9/12">
+            <table class="w-full">
+                <thead class="bg-gray-200 text-gray-600">
                     <tr>
-                        <th scope="col">Product</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Actions</th>
+                        <th class="w-1/4">Product</th>
+                        <th class="w-1/6 py-2">Quantity</th>
+                        <th class="w-1/6 py-2">Price</th>
+                        <th class="w-1/6 py-2">Total</th>
+                        <th class="w-1/6 py-2">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in cart.cartitem_set.all %}
-                    <tr data-item-id="{{ item.id }}">
-                        <td>{{ item.product.name }}</td>
-                        <td>
+                    <tr
+                        class="border-b border-gray-200 text-gray-600 align-middle py-2"
+                        data-item-id="{{ item.id }}">
+                        <td class="w-1/4">{{ item.product.name }}</td>
+                        <td class="w-1/6 py-2 px-4 flex items-center">
                             <!-- Increase quantity -->
-                            <button class="btn btn-outline-success btn-sm update-quantity" 
-                                    data-action="increase" 
-                                    data-url="{% url 'update_cart_quantity' item.id 'increase' %}">
+                            <button
+                                class="bg-green-500 rounded px-2 py-1 text-white"
+                                hx-post="{% url 'update_cart_quantity' item.id 'increase' %}"
+                                hx-target="#cartitem-{{ item.id }} .item-quantity"
+                                hx-swap="innerHTML">
                                 +
                             </button>
 
-                            <span class="mx-3 item-quantity">{{ item.quantity }}</span>
+                            <span class="mx-3 item-quantity"
+                                id="cartitem-{{ item.id }}-quantity">
+                                {{ item.quantity }}
+                            </span>
 
-                            <!-- Decrease quantity -->
-                            <button class="btn btn-outline-danger btn-sm update-quantity" 
-                                    data-action="decrease" 
-                                    data-url="{% url 'update_cart_quantity' item.id 'decrease' %}">
+                            <button
+                                class="bg-red-500 rounded px-2 py-1 text-white"
+                                hx-post="{% url 'update_cart_quantity' item.id 'decrease' %}"
+                                hx-target="#cartitem-{{ item.id }} .item-quantity"
+                                hx-swap="innerHTML">
                                 -
                             </button>
                         </td>
-                        <td>{{ item.product.get_discounted_price }}</td>
-                        <td>
+                        <td class="w-1/6 py-2 px-4">{{item.product.get_discounted_price }}</td>
+                        <td class="w-1/6 py-2 px-4">
                             <span class="item-total">{{ item.get_total_price }}</span>
                         </td>
-                        <td>
-                            <form method="POST" action="{% url 'remove_from_cart' item.id %}">
+                        <td class="w-1/6 py-2 px-4">
+                            <form method="POST"
+                                action="{% url 'remove_from_cart' item.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-m">X</button>
+                                <button type="submit"
+                                    class="bg-red-600 rounded px-2 py-1 text-white">Remove</button>
                             </form>
                         </td>
                     </tr>
                     {% endfor %}
-                    <tr>
+                    <tr class="border-t">
                         <td colspan="2"></td>
-                        <td>Subtotal:</td>
-                        <td>
+                        <td class="w-1/6 py-2 px-4 font-bold">Subtotal:</td>
+                        <td class="w-1/6 py-2 px-4 font-bold">
                             <span id="cart-subtotal">{{ cart.get_total_price }}</span>
                         </td>
                         <td></td>
@@ -64,57 +78,38 @@
             </table>
         </div>
 
-        <div class="col-md-2">
-            <a class="btn btn-primary" href="{% url 'checkout' %}">Proceed to Checkout</a>
+        <div class="w-full md:w-2/12 mt-4 md:mt-0 md:ml-4">
+            <a
+                class="bg-blue-500 text-white px-4 py-2 rounded block text-center"
+                href="{% url 'checkout' %}">Proceed to Checkout</a>
         </div>
+    </div>
 
     {% else %}
     <div class="text-center">
-        <p class="text-muted">Your cart is currently empty.</p>
-        <a href="{% url 'shop' %}" class="btn btn-secondary">Continue Shopping</a>
+        <p class="text-gray-500">Your cart is currently empty.</p>
+        <br>
+        <a href="{% url 'shop' %}" class="bg-gray-500 text-white px-4 py-2 rounded">Continue Shopping</a>
     </div>
     {% endif %}
 </div>
-
-<!-- CSRF token for AJAX -->
-<script>
-    function getCSRFToken() {
-        return document.querySelector('[name=csrfmiddlewaretoken]').value;
-    }
-
-    $(document).ready(function () {
-        $('.update-quantity').click(function (e) {
-            e.preventDefault();
-            let button = $(this);
-            let url = button.data('url');
-            let row = button.closest('tr');
-            let itemId = row.data('item-id');
-
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    csrfmiddlewaretoken: getCSRFToken(),
-                },
-                success: function (response) {
-                    // Update quantity and total price dynamically
-                    row.find('.item-quantity').text(response.quantity);
-                    row.find('.item-total').text(response.item_total);
-                    $('#cart-subtotal').text(response.cart_total);
-                },
-                error: function () {
-                    alert('Error updating cart. Please try again.');
-                }
-            });
-        });
-    });
-</script>
-
-<style>
-    .btn-sm {
-        padding: 0.3rem 0.6rem;
-        font-size: 1rem;
-    }
-</style>
+{% else %}
+<div class="text-center">
+    <p class="text-gray-500">Please login to view your cart.</p>
+    <a href="{% url 'login' %}"
+        class="bg-gray-500 text-white px-4 py-2 rounded">Login</a>
+</div>
+{% endif %}
 
 {% endblock %}
+
+
+<script>
+    document.addEventListener('htmx:afterRequest', function(evt) {
+        if (evt.detail.verb === 'post') {
+            const itemQuantity = evt.detail.target;
+            const newQuantity = evt.detail.xhr.responseText;
+            itemQuantity.innerText = newQuantity;
+        }
+    });
+</script>

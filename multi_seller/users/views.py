@@ -30,6 +30,8 @@ def user_login(request):
             user = form.get_user()
             login(request, user)
             return redirect('profile')
+        else:
+            messages.error(request, 'Please enter a correct username and password')
     else:
         form = LoginForm()
     return render(request, 'users/login.html', {'form': form})
@@ -45,8 +47,9 @@ def user_logout(request):
 @never_cache
 def profile_view(request):
     profile = UserProfile.objects.get(user=request.user)
-    messages.success(request, 'You have been logged in successfully!')
+    messages.success(request, f'Welcome {request.user.first_name}')
     return render(request, 'users/profile.html', {'profile': profile})
+
 
 
 @login_required
@@ -59,8 +62,11 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated successfully!')
-            return redirect('profile')  
+            return redirect('profile')
+        else:
+            messages.error(request, 'There were errors in your form submission.')
     else:
         form = EditProfileForm(instance=profile)
 
     return render(request, 'users/edit_profile.html', {'form': form})
+

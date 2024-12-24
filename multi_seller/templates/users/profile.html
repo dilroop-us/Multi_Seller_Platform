@@ -3,38 +3,30 @@
 {% block title %}
     My Profile
 {% endblock %}
+{% load static %}
 
 {% block content %}
 
-{% load crispy_forms_tags %}
-
-<div class="container mt-5 p-4 bg-light rounded shadow position-relative">
-    <h2>My Profile</h2>
-
-    <!-- Profile Image Positioned at the Top-Right -->
-    {% if profile.profile_image %}
-        <img 
-            src="{{ profile.profile_image.url }}" 
-            alt="Profile Image" 
-            class="rounded-circle position-absolute" 
-            style="top: 50px; right: 50px; width: 160px; height: 160px; object-fit: cover;">
-    {% endif %}
-
-    <div class="mt-5">
-        <p><strong>Street Address:</strong> {{ profile.street_address }}</p>
-        <p><strong>City:</strong> {{ profile.city }}</p>
-        <p><strong>State/Province:</strong> {{ profile.state }}</p>
-        <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
-        <p><strong>Country:</strong> {{ profile.get_country_display }}</p>
-        <p><strong>Date of Birth: </strong> {{ profile.date_of_birth }}</p>
+<div class="card glass w-1/2 mx-auto">
+    <figure>
+      <img
+        src="{{ user.profile.profile_image.url }}"
+        alt="car!" />
+    </figure>
+    <div class="card-body">
+      <h2 class="card-title"> Welcome {{ user.username }}</h2>
+        <p>email : {{ user.email }}</p>
+        <p>Name : {{ user.profile.full_name }}</p>
+        <p>Phone : {{ user.profile.phone_number }}</p>
+        <p>Address : {{ user.profile.address_line_1 }}</p>
+       <p>City : {{ user.profile.city }}</p>
+       <p>State : {{ user.profile.state }}</p>
+       <p>Zip Code : {{ user.profile.zip_code }}</p>
+       <div class="card-actions justify-end">
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+      </div>
     </div>
-
-    <div class="mt-3">
-        <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary">Edit Profile</a>
-    </div>
-
-
-</div>
+  </div>
 
 <br>
 

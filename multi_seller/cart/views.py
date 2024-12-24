@@ -5,9 +5,12 @@ from products.models import Product
 from django.db import transaction
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponse
+from django.contrib import messages
+from django.db import transaction
+from django.contrib.auth.decorators import login_required
 
 
-@login_required
+
 def get_or_create_cart(request):
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -23,9 +26,18 @@ def get_or_create_cart(request):
 def add_to_cart(request, product_id, quantity=1):
     cart = get_or_create_cart(request)  
     product = get_object_or_404(Product, id=product_id) 
+    
+    if product.stock == 0:
+        messages.error(request, 'Product is out of stock')
+        return redirect('shop')
+    
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
     if not created:
         cart_item.quantity += int(quantity)
+        
+    
+    product.stock -= int(quantity)
+    product.save()
     cart_item.save()  
     return cart_item
 
@@ -72,29 +84,34 @@ def merge_carts(request, user_cart, session_cart):
 
 @login_required
 def remove_from_cart(request, item_id):
-    CartItem.objects.filter(id=item_id).delete()
+    # Get the cart item
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    product = cart_item.product
+
+    # Restore the product stock
+    product.stock += cart_item.quantity
+    product.save()
+
+    cart_item.delete()
+    
+    messages.success(request, f"{product.name} removed from cart. Stock updated.")
     return redirect('cart')
 
 
 
 
 def update_cart_quantity(request, item_id, action):
-    cart_item = get_object_or_404(CartItem, id=item_id)
-    cart = cart_item.cart
-
+    item = CartItem.objects.get(id=item_id)
     if action == 'increase':
-        cart_item.quantity += 1
-    elif action == 'decrease' and cart_item.quantity > 1:
-        cart_item.quantity -= 1
+        item.quantity += 1
+    elif action == 'decrease' and item.quantity > 1:
+        item.quantity -= 1
+    item.save()
+    
+    return JsonResponse(render_to_string('core/cart.html', {'cart': item.cart, 
+                   'total_price': calculate_cart_total(item.cart),
+                   'item': item}))
 
-    cart_item.save()
-    cart_total = cart.get_total_price()
-
-    return JsonResponse({
-        'quantity': cart_item.quantity,
-        'item_total': cart_item.get_total_price(),
-        'cart_total': cart_total
-    })
 
 
 

@@ -55,7 +55,9 @@ def seller_update_product(request, pk):
     if request.method == 'POST':
         form = ProductUpdateForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            form.save()
+            product = form.save(commit=False)
+            product.seller = seller
+            product.save()
             messages.success(request, 'Product updated successfully')
             return redirect('seller_products')
         else:
@@ -63,7 +65,7 @@ def seller_update_product(request, pk):
     else:
         form = ProductUpdateForm(instance=product)
         
-    return render(request, 'products/product_form.html', {'form': form})
+    return render(request, 'products/product_edit.html', {'form': form})
 
 
 
